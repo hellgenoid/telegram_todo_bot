@@ -17,51 +17,51 @@ tasks = {} # Создает словарь, куда будет добавлят
 random_tasks = ["Учить Python", "Покушать", "Поиграть в приставку", "Заняться машиной"] # Случайные задания, для добавления.
 
 def add_tasks(date, task):
-  """Добавляет задачу на определенную дату. Также проверяет есть ли уже такая дата в памяти."""
-  if date in tasks:
-    tasks[date].append(task)              
-  else:
-    tasks[date] = [task]
+   """Добавляет задачу на определенную дату. Также проверяет есть ли уже такая дата в памяти."""
+    if date in tasks:
+      tasks[date].append(task)              
+    else:
+      tasks[date] = [task]
   
-  print(f'Задача {task} добавлена на дату {date}.')
+    print(f'Задача {task} добавлена на дату {date}.')
 
 
 @bot.message_handler(commands=["help"])
 def help_me(message):
-  """Заставляет бота реагировать на команду 'help'"""
-  bot.send_message(message.chat.id, HELP)
+    """Заставляет бота реагировать на команду 'help'"""
+    bot.send_message(message.chat.id, HELP)
 
 @bot.message_handler(commands=["add"])
 def add_task(message):
-  """Заставляет бота выполнить основную функцию добавления задачи и даты."""
-  bot.send_message(message.chat.id, "Введите дату и задачу: ")
-  splitted_command = message.text.split(maxsplit=2)
-  date = splitted_command[1].lower()
-  task = splitted_command[2]
-  if len(task) <= 3:
-    bot.send_message(message.chat.id, 'Задача не может быть короче трех символов!')
-    add_task(message)
-  else:
-    add_tasks(date, task)
-  bot.send_message(message.chat.id, f'Задача {task} добавлена на дату {date}')
+    """Заставляет бота выполнить основную функцию добавления задачи и даты."""
+    bot.send_message(message.chat.id, "Введите дату и задачу: ")
+    splitted_command = message.text.split(maxsplit=2)
+    date = splitted_command[1].lower()
+    task = splitted_command[2]
+    if len(task) <= 3:
+      bot.send_message(message.chat.id, 'Задача не может быть короче трех символов!')
+      add_task(message)
+    else:
+      add_tasks(date, task)
+    bot.send_message(message.chat.id, f'Задача {task} добавлена на дату {date}')
   
 @bot.message_handler(commands=["random"])
 def random_task(message):
-  """Застявляет бота добавить на сегодня случайное задание из списка."""
-  task = random.choice(random_tasks)    
-  add_tasks('сегодня', task)
-  bot.send_message(message.chat.id, f'Задача {task} добавлена на дату сегодня')
+    """Застявляет бота добавить на сегодня случайное задание из списка."""
+    task = random.choice(random_tasks)    
+    add_tasks('сегодня', task)
+    bot.send_message(message.chat.id, f'Задача {task} добавлена на дату сегодня')
 
 @bot.message_handler(commands=["print"])
 def print_tasks(message):
-  """Заставляет бота показать задачи на выбранную дату."""
-  splitted_command = message.text.split()
-  date = splitted_command[1].lower()
-  if date in tasks:
-    for task in tasks[date]:
-      text = f"- {task}\n"
-  else:
-    text = 'Такой даты нет' 
-  bot.send_message(message.chat.id, text)
+    """Заставляет бота показать задачи на выбранную дату."""
+    splitted_command = message.text.split()
+    date = splitted_command[1].lower()
+    if date in tasks:
+      for task in tasks[date]:
+        text = f"- {task}\n"
+    else:
+      text = 'Такой даты нет' 
+    bot.send_message(message.chat.id, text)
 
 bot.polling(none_stop=True)
